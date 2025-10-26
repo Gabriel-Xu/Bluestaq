@@ -175,5 +175,5 @@ Features that could be implemented include:
 - a more sophisticated elevator scoring algorithm
 - more precise timing of door opening/closing
 - tracking of number of passengers/weight
-- allowing multiple threads to call methods on the system of elevators
+- allowing multiple threads to simultaneously call methods on the system of elevators
 */
