@@ -1,0 +1,78 @@
+<div class="container">
+  <header class="header">
+    <h1>🎭 {{ title }}</h1>
+    <p class="subtitle">Discover timeless poetry from the masters</p>
+  </header>
+
+  <div class="search-container">
+    <div class="search-box">
+      <div class="search-type">
+        <label>
+          <input type="radio" name="searchType" value="author" [(ngModel)]="searchType">
+          Author
+        </label>
+        <label>
+          <input type="radio" name="searchType" value="title" [(ngModel)]="searchType">
+          Title
+        </label>
+      </div>
+      
+      <div class="search-input-group">
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery" 
+          (keyup.enter)="searchPoems()"
+          [placeholder]="'Search by ' + searchType + '...'"
+          class="search-input"
+          [disabled]="loading">
+        <button (click)="searchPoems()" class="btn btn-search" [disabled]="loading">
+          {{ loading ? '🔍 Searching...' : '🔍 Search' }}
+        </button>
+        <button (click)="getRandomPoem()" class="btn btn-random" [disabled]="loading">
+          🎲 Random
+        </button>
+        <button (click)="clearSearch()" class="btn btn-clear" *ngIf="searchQuery || poems.length > 0">
+          ✕ Clear
+        </button>
+      </div>
+    </div>
+
+    <div class="error-message" *ngIf="error">
+      ⚠️ {{ error }}
+    </div>
+    
+    <div class="success-message" *ngIf="poems.length > 0 && !loading">
+      ✨ Found {{ poems.length }} poem{{ poems.length > 1 ? 's' : '' }}
+    </div>
+  </div>
+
+  <div class="results-container" *ngIf="poems.length > 0">
+    <div class="poems-grid">
+      <div class="poem-card" *ngFor="let poem of poems; let i = index">
+        <div class="poem-number">{{ i + 1 }}</div>
+        <h3 class="poem-title">{{ poem.title }}</h3>
+        <p class="poem-author">by {{ poem.author }}</p>
+        <div class="poem-content">
+          <p *ngFor="let line of poem.lines" class="poem-line">
+            {{ line || '&nbsp;' }}
+          </p>
+        </div>
+        <div class="poem-footer">
+          <span class="poem-stat">📝 {{ poem.linecount }} lines</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && poems.length === 0 && !error">
+    <div class="empty-icon">📚</div>
+    <h3>Start Your Poetry Journey</h3>
+    <p>Search for poems by author (e.g., "Shakespeare", "Dickinson") or by title</p>
+    <p class="empty-hint">Or click <strong>Random</strong> to discover something new!</p>
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading beautiful poetry...</p>
+  </div>
+</div>
